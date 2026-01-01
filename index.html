@@ -3,171 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <title>TagBase</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
 
 <style>
 body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#0e0e0e;
+  background:#111;
   color:#fff;
+  font-family: Arial, sans-serif;
   text-align:center;
 }
-header{background:#000;padding:40px;}
-header h1{
-  font-family:'Rubik Wet Paint', cursive;
-  font-size:56px;
+
+input, select, button{
+  padding:8px;
+  margin:5px;
+  width:80%;
+  max-width:300px;
 }
-section{padding:40px 20px;}
-.box{
-  max-width:600px;
-  margin:auto;
-  background:#161616;
-  padding:25px;
-  border-radius:12px;
-  margin-bottom:20px;
-}
-input,select,button{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:6px;
+
+button{
+  background:#ff2e2e;
   border:none;
+  color:#fff;
+  cursor:pointer;
 }
-button{font-weight:bold;cursor:pointer;}
-button:disabled{background:#444;}
-.admin{border:2px dashed #ff5555;}
+
+.hidden{display:none;}
+
+hr{margin:30px 0;}
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>TAGBASE</h1>
-<p>Sokaktan doğdu.</p>
-</header>
+<img src="logo.png" width="200"><br><br>
 
-<section>
+<h2>TagBase Shop</h2>
 
-<div class="box">
-<h2>Hakkımızda</h2>
-<p>Graffiti ve Posca kalem satışı.<br>📍 Bursa / Mustafakemalpaşa</p>
-</div>
+<!-- GİRİŞ -->
+<h3>Giriş</h3>
+<input id="loginUser" placeholder="Kullanıcı adı">
+<input id="loginPass" type="password" placeholder="Şifre">
+<button onclick="login()">Giriş Yap</button>
 
-<div class="box">
-<h2>Ürün</h2>
-<p>Posca Kalem</p>
-<p>Stok: <span id="stok"></span></p>
-<p>Fiyat: <span id="fiyatGoster"></span> TL</p>
-</div>
+<!-- KAYIT -->
+<hr>
+<h3>Kayıt Ol</h3>
+<input id="regUser" placeholder="Yeni kullanıcı adı">
+<input id="regPass" type="password" placeholder="Yeni şifre">
+<button onclick="register()">Kayıt Ol</button>
 
-<div class="box">
-<h2>Sipariş</h2>
-<p id="uyari" style="color:#ff5555;">⚠️ Giriş yapmadan sipariş yok</p>
+<p style="font-size:13px;color:#aaa">
+Kayıt olmadan sipariş verilemez.
+</p>
 
-<form action="https://formspree.io/f/mdakkpzw" method="POST" onsubmit="return siparisKontrol()">
+<!-- SİPARİŞ -->
+<div id="orderArea" class="hidden">
+<hr>
+<h2>Sipariş Ver</h2>
 
-<input type="hidden" name="_cc" value="ADMIN_MAIL@MAIL.COM">
-<input name="siparis_no" id="siparisNo" readonly>
+<form action="https://formspree.io/f/mdakkpzw" method="POST" onsubmit="return beforeSend()">
+
+<input name="siparis_no" id="orderNo" readonly>
 
 <input name="isim" placeholder="İsim Soyisim" required>
 <input name="adres" placeholder="Adres" required>
 
-<select id="adet" name="adet" onchange="hesapla()" required></select>
+<select name="urun">
+  <option>Posca Kalem</option>
+</select>
 
-<input name="tutar" id="tutar" readonly>
+<select name="renk" required>
+  <option value="">Renk Seç</option>
+  <option>Siyah</option>
+  <option>Beyaz</option>
+  <option>Kırmızı</option>
+  <option>Mavi</option>
+</select>
 
-<button id="siparisBtn" disabled>Siparişi Gönder</button>
+<input type="number" id="adet" name="adet" placeholder="Adet" min="1" value="1" required oninput="calc()">
+
+<input name="toplam_fiyat" id="price" readonly>
+
+<button type="submit">Siparişi Gönder</button>
+
 </form>
 </div>
 
-<div class="box">
-<h2>Giriş</h2>
-<input id="user">
-<input id="pass" type="password">
-<button onclick="login()">Giriş Yap</button>
-</div>
-
-<div class="box admin" id="adminPanel" style="display:none;">
-<h2>ADMIN PANEL</h2>
-
-<label>Fiyat Değiştir (₺)</label>
-<input id="adminFiyat" type="number">
-<button onclick="fiyatDegistir()">Kaydet</button>
-
-<label>Stok</label>
-<input id="adminStok" type="number">
-<button onclick="stokDegistir()">Kaydet</button>
-
-<select>
-<option>⏳ Beklemede</option>
-<option>✅ Onaylandı</option>
-<option>❌ Reddedildi</option>
-</select>
-</div>
-
-</section>
-
 <script>
-let admin=false;
-let giris=false;
+const ADMIN_USER = "cinar0zer";
+const ADMIN_PASS = "han11222";
 
-let fiyat=localStorage.getItem("fiyat") || 170;
-let stok=localStorage.getItem("stok") || 10;
-
-function guncelle(){
-  document.getElementById("stok").innerText=stok;
-  document.getElementById("fiyatGoster").innerText=fiyat;
-  document.getElementById("adet").innerHTML="";
-  for(let i=1;i<=stok;i++){
-    document.getElementById("adet").innerHTML+=
-      `<option value="${i}">${i} Adet</option>`;
-  }
-}
-
-function hesapla(){
-  let a=document.getElementById("adet").value;
-  document.getElementById("tutar").value=(a*fiyat)+" TL";
+function register(){
+  let u = regUser.value;
+  let p = regPass.value;
+  if(!u || !p){ alert("Boş bırakma"); return; }
+  localStorage.setItem(u,p);
+  alert("Kayıt başarılı");
 }
 
 function login(){
-  let u=user.value,p=pass.value;
-  if(u==="cinar0zer" && p==="han11222"){
-    admin=true;
-    document.getElementById("adminPanel").style.display="block";
+  let u = loginUser.value;
+  let p = loginPass.value;
+
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    alert("Admin girişi");
+    orderArea.classList.remove("hidden");
+    return;
   }
-  if(localStorage.getItem(u)===p || admin){
-    giris=true;
-    document.getElementById("siparisBtn").disabled=false;
-    document.getElementById("uyari").innerText="✅ Sipariş verebilirsin";
+
+  let saved = localStorage.getItem(u);
+  if(saved===p){
+    alert("Giriş başarılı");
+    orderArea.classList.remove("hidden");
+  }else{
+    alert("Hatalı giriş");
   }
 }
 
-function siparisKontrol(){
-  if(!giris) return false;
-  stok--;
-  localStorage.setItem("stok",stok);
-  guncelle();
+function calc(){
+  let adet = adetInput = document.getElementById("adet").value;
+  document.getElementById("price").value = adet * 170 + " TL";
+}
+
+function beforeSend(){
+  let no = "TB-" + Math.floor(Math.random()*99999);
+  document.getElementById("orderNo").value = no;
   return true;
 }
 
-function fiyatDegistir(){
-  fiyat=adminFiyat.value;
-  localStorage.setItem("fiyat",fiyat);
-  guncelle();
-}
-
-function stokDegistir(){
-  stok=adminStok.value;
-  localStorage.setItem("stok",stok);
-  guncelle();
-}
-
-document.getElementById("siparisNo").value="TB-"+Math.floor(Math.random()*999999);
-guncelle();
-hesapla();
+calc();
 </script>
 
 </body>
 </html>
+
