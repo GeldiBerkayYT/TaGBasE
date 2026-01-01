@@ -1,96 +1,143 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>TagBase</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #0e0e0e;
-      color: #fff;
-      text-align: center;
-    }
-    header {
-      padding: 60px 20px;
-      background: #000;
-    }
-    .logo {
-      width: 160px;
-      margin-bottom: 15px;
-      filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
-    }
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-    }
-    p {
-      color: #ccc;
-      font-size: 18px;
-    }
-    section {
-      padding: 40px 20px;
-    }
-    .box {
-      max-width: 600px;
-      margin: auto;
-      background: #161616;
-      padding: 25px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    footer {
-      padding: 20px;
-      font-size: 14px;
-      color: #777;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>TagBase</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:#0e0e0e;
+  color:#fff;
+  text-align:center;
+}
+header {
+  padding:60px 20px;
+  background:#000;
+}
+.logo {
+  width:160px;
+  margin-bottom:15px;
+}
+h1 { font-size:48px; letter-spacing:2px; }
+section { padding:40px 20px; }
+.box {
+  max-width:600px;
+  margin:auto;
+  background:#161616;
+  padding:25px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+input, button {
+  width:90%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:6px;
+  border:none;
+  font-size:16px;
+}
+button {
+  background:#fff;
+  color:#000;
+  cursor:pointer;
+}
+.hidden { display:none; }
+footer {
+  padding:20px;
+  font-size:14px;
+  color:#777;
+}
+</style>
 </head>
 <body>
 
 <header>
-  <img src="image.png" alt="TagBase Logo" class="logo">
+  <img src="logo.png" class="logo">
   <h1>TAGBASE</h1>
   <p>ig: @cinar0zer</p>
 </header>
 
 <section>
-  <div class="box">
-    <h2>Hakkımızda</h2>
-    <p>
-      TagBase, sokak stili ve grafiti kültürü için kurulmuştur.
-      POSCA kalemler ve tag ekipmanları satışı yapılmaktadır.<br><br>
 
-      📍 Elden teslim vardır.<br>
-      🚫 Kargo yoktur.<br>
-      📍 Bursa / Mustafa Kemal Paşa
-    </p>
-  </div>
+<!-- LOGIN / REGISTER -->
+<div class="box" id="loginBox">
+  <h2>Giriş / Kayıt</h2>
 
-  <div class="box">
-    <h2>Ürünler</h2>
-    <p>
-      • Sprey Boyalar<br>
-      • POSCA Kalemler<br>
-      • Tag & Marker Ekipmanları<br>
-    </p>
-  </div>
+  <input type="text" id="user" placeholder="Kullanıcı adı">
+  <input type="password" id="pass" placeholder="Şifre">
 
-  <div class="box">
-    <h2>İletişim</h2>
-    <p>
-      Instagram DM üzerinden ulaşabilirsiniz.<br>
-      📍 Sokaktan doğdu.
-    </p>
-  </div>
+  <button onclick="kayit()">Kayıt Ol</button>
+  <button onclick="giris()">Giriş Yap</button>
+</div>
+
+<!-- SİPARİŞ -->
+<div class="box hidden" id="siparisBox">
+  <h2>POSCA Kalem Siparişi</h2>
+
+  <form action="https://formspree.io/f/mdakkpzw" method="POST">
+    <input type="hidden" name="Ürün" value="POSCA Kalem">
+    <input type="hidden" name="Toplam Fiyat" id="mailFiyat">
+
+    <input type="text" name="Renk" placeholder="Renk" required>
+    <input type="number" id="adet" name="Adet" value="1" min="1" onchange="hesapla()" required>
+    <input type="text" name="Teslim Yeri" placeholder="Teslim edilecek yer" required>
+    <input type="text" name="İletişim" placeholder="IG / Telefon" required>
+
+    <p><b>Toplam:</b> <span id="fiyat">170</span> TL</p>
+
+    <button type="submit">Siparişi Gönder</button>
+  </form>
+
+  <button onclick="cikis()" style="margin-top:10px;">Çıkış Yap</button>
+</div>
+
 </section>
 
 <footer>
-  © 2026 TagBase — @cinar0zer
+© 2026 TagBase
 </footer>
+
+<script>
+const fiyatTek = 170;
+
+function hesapla(){
+  let adet = document.getElementById("adet").value;
+  let toplam = adet * fiyatTek;
+  document.getElementById("fiyat").innerText = toplam;
+  document.getElementById("mailFiyat").value = toplam + " TL";
+}
+
+function kayit(){
+  let u = user.value;
+  let p = pass.value;
+  if(!u || !p) return alert("Boş bırakma");
+  localStorage.setItem("tb_user", u);
+  localStorage.setItem("tb_pass", p);
+  alert("Kayıt başarılı");
+}
+
+function giris(){
+  if(user.value === localStorage.getItem("tb_user") &&
+     pass.value === localStorage.getItem("tb_pass")){
+      loginBox.classList.add("hidden");
+      siparisBox.classList.remove("hidden");
+  } else {
+    alert("Hatalı giriş");
+  }
+}
+
+function cikis(){
+  siparisBox.classList.add("hidden");
+  loginBox.classList.remove("hidden");
+}
+
+if(localStorage.getItem("tb_user")){
+  loginBox.classList.remove("hidden");
+}
+hesapla();
+</script>
 
 </body>
 </html>
-
