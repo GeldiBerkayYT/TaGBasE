@@ -4,37 +4,28 @@
 <meta charset="UTF-8">
 <title>TagBase</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-body {
+body{
   margin:0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
   background:#0e0e0e;
   color:#fff;
   text-align:center;
 }
-header {
+header{
   padding:60px 20px;
   background:#000;
 }
-.logo {
-  width:160px;
-  margin-bottom:15px;
+.logo{width:160px;margin-bottom:15px;}
+h1{font-size:48px;letter-spacing:3px;}
+.graffiti{animation:flicker 2s infinite;}
+@keyframes flicker{
+  0%{color:#fff;}
+  50%{color:#ff2d2d;}
+  100%{color:#fff;}
 }
-h1 {
-  font-size:48px;
-  letter-spacing:3px;
-}
-.graffiti {
-  animation: flicker 2s infinite;
-}
-@keyframes flicker {
-  0% { color:#fff; }
-  50% { color:#ff2d2d; }
-  100% { color:#fff; }
-}
-section { padding:40px 20px; }
-.box {
+section{padding:40px 20px;}
+.box{
   max-width:600px;
   margin:auto;
   background:#161616;
@@ -42,7 +33,7 @@ section { padding:40px 20px; }
   border-radius:10px;
   margin-bottom:20px;
 }
-input, button, textarea {
+input,button,textarea{
   width:90%;
   padding:10px;
   margin-top:8px;
@@ -50,21 +41,10 @@ input, button, textarea {
   border:none;
   font-size:16px;
 }
-button {
-  background:#fff;
-  color:#000;
-  cursor:pointer;
-}
-.hidden { display:none; }
-.admin {
-  color:#ff4d4d;
-  font-weight:bold;
-}
-footer {
-  padding:20px;
-  font-size:14px;
-  color:#777;
-}
+button{background:#fff;color:#000;cursor:pointer;}
+.hidden{display:none;}
+.admin{color:#ff4d4d;font-weight:bold;}
+footer{padding:20px;font-size:14px;color:#777;}
 </style>
 </head>
 
@@ -74,7 +54,7 @@ footer {
   <img src="logo.png" class="logo">
   <h1 id="title">TAGBASE</h1>
   <p>ig: @cinar0zer</p>
-  <p id="adminText" class="admin hidden">ADMIN MODU AKTİF</p>
+  <p id="adminText" class="admin hidden">ADMIN MODU</p>
 </header>
 
 <section>
@@ -83,8 +63,8 @@ footer {
 <div class="box">
   <h2>Hakkımızda</h2>
   <p>
-    TagBase sokak kültürü için POSCA kalem ve graffiti ürünleri satar.  
-    Elden teslim vardır, kargo yoktur.  
+    TagBase sokak kültürü için POSCA kalem ve graffiti ürünleri satar.<br>
+    Elden teslim vardır, kargo yoktur.<br>
     📍 Bursa / Mustafakemalpaşa
   </p>
 </div>
@@ -100,19 +80,14 @@ footer {
 
 <div class="box">
   <h2>İletişim</h2>
-  <p>
-    DM üzerinden ulaşabilirsiniz<br>
-    IG: @cinar0zer
-  </p>
+  <p>DM: @cinar0zer</p>
 </div>
 
-<!-- ADMIN PANEL (GİZLİ) -->
+<!-- ADMIN PANEL -->
 <div class="box hidden" id="adminPanel">
   <h2>Admin Kontrol</h2>
-
   <input type="number" id="adminFiyat" placeholder="Yeni Kalem Fiyatı (TL)">
   <button onclick="fiyatGuncelle()">Fiyatı Güncelle</button>
-
   <textarea id="adminNot" placeholder="Siparişe admin notu"></textarea>
 </div>
 
@@ -127,71 +102,74 @@ footer {
 
     <input type="text" name="Renk" placeholder="Renk" required>
     <input type="number" id="adet" name="Adet" value="1" min="1" onchange="hesapla()" required>
-    <input type="text" name="Teslim Yeri" placeholder="Teslim edilecek yer" required>
+    <input type="text" name="Teslim Yeri" placeholder="Teslim Yeri" required>
     <input type="text" name="İletişim" placeholder="IG / Telefon" required>
 
     <p><b>Toplam:</b> <span id="fiyat">170</span> TL</p>
-
     <button type="submit">Siparişi Gönder</button>
   </form>
 
-  <button onclick="cikis()" style="margin-top:10px;">Çıkış Yap</button>
+  <button onclick="cikis()">Çıkış Yap</button>
 </div>
 
-<!-- GİRİŞ EN ALT -->
+<!-- KAYIT / GİRİŞ (EN ALT) -->
 <div class="box" id="loginBox">
-  <h2>Giriş Yap</h2>
+  <h2>Kayıt / Giriş</h2>
   <input type="text" id="user" placeholder="Kullanıcı adı">
   <input type="password" id="pass" placeholder="Şifre">
-  <button onclick="giris()">Giriş</button>
+  <button onclick="kayit()">Kayıt Ol</button>
+  <button onclick="giris()">Giriş Yap</button>
 </div>
 
 </section>
 
-<footer>
-© 2026 TagBase
-</footer>
+<footer>© 2026 TagBase</footer>
 
 <script>
 let fiyatTek = localStorage.getItem("fiyat") || 170;
-
-const adminUser = "cinar0zer";
-const adminPass = "han11222";
+const adminUser="cinar0zer";
+const adminPass="han11222";
 
 function hesapla(){
-  let adet = document.getElementById("adet").value;
-  let toplam = adet * fiyatTek;
-  document.getElementById("fiyat").innerText = toplam;
-  document.getElementById("mailFiyat").value = toplam + " TL";
+  let adet=adetInput.value;
+  let toplam=adet*fiyatTek;
+  fiyat.innerText=toplam;
+  mailFiyat.value=toplam+" TL";
+}
+
+function kayit(){
+  if(!user.value||!pass.value) return alert("Boş bırakma");
+  localStorage.setItem("tb_user",user.value);
+  localStorage.setItem("tb_pass",pass.value);
+  alert("Kayıt başarılı");
 }
 
 function giris(){
-  let u = user.value;
-  let p = pass.value;
-
-  loginBox.classList.add("hidden");
-  siparisBox.classList.remove("hidden");
-
-  if(u === adminUser && p === adminPass){
+  if(user.value===adminUser && pass.value===adminPass){
     adminText.classList.remove("hidden");
     adminPanel.classList.remove("hidden");
     title.classList.add("graffiti");
+  } else {
+    if(user.value!==localStorage.getItem("tb_user") ||
+       pass.value!==localStorage.getItem("tb_pass")){
+      return alert("Hatalı giriş");
+    }
   }
+  loginBox.classList.add("hidden");
+  siparisBox.classList.remove("hidden");
 }
 
 function fiyatGuncelle(){
-  let yeni = document.getElementById("adminFiyat").value;
-  if(yeni > 0){
-    fiyatTek = yeni;
-    localStorage.setItem("fiyat", yeni);
+  if(adminFiyat.value>0){
+    fiyatTek=adminFiyat.value;
+    localStorage.setItem("fiyat",fiyatTek);
     hesapla();
     alert("Fiyat güncellendi");
   }
 }
 
-document.getElementById("adminNot").addEventListener("input", () => {
-  document.getElementById("mailAdminNot").value =
-    document.getElementById("adminNot").value;
+adminNot.addEventListener("input",()=>{
+  mailAdminNot.value=adminNot.value;
 });
 
 function cikis(){
@@ -202,6 +180,7 @@ function cikis(){
   title.classList.remove("graffiti");
 }
 
+const adetInput=document.getElementById("adet");
 hesapla();
 </script>
 
