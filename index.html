@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <title>TagBase</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:#0e0e0e;
+  background:#0b0b0b;
   color:#fff;
   text-align:center;
 }
@@ -16,35 +17,49 @@ header{
   padding:60px 20px;
   background:#000;
 }
-.logo{width:160px;margin-bottom:15px;}
-h1{font-size:48px;letter-spacing:3px;}
-.graffiti{animation:flicker 2s infinite;}
+.logo{width:150px;margin-bottom:10px;}
+h1{
+  font-size:50px;
+  letter-spacing:4px;
+  animation:flicker 2s infinite;
+}
 @keyframes flicker{
   0%{color:#fff;}
   50%{color:#ff2d2d;}
   100%{color:#fff;}
 }
-section{padding:40px 20px;}
 .box{
   max-width:600px;
-  margin:auto;
+  margin:20px auto;
   background:#161616;
   padding:25px;
   border-radius:10px;
-  margin-bottom:20px;
 }
-input,button,textarea{
+button,input,select,textarea{
   width:90%;
   padding:10px;
-  margin-top:8px;
+  margin-top:10px;
   border-radius:6px;
   border:none;
   font-size:16px;
 }
-button{background:#fff;color:#000;cursor:pointer;}
+button{
+  background:#fff;
+  color:#000;
+  cursor:pointer;
+}
+button:hover{
+  background:#ff2d2d;
+  color:#fff;
+}
 .hidden{display:none;}
-.admin{color:#ff4d4d;font-weight:bold;}
-footer{padding:20px;font-size:14px;color:#777;}
+.admin{color:#ff4444;font-weight:bold;}
+footer{padding:20px;color:#777;}
+.orderNo{
+  color:#00ff99;
+  font-weight:bold;
+  margin-top:10px;
+}
 </style>
 </head>
 
@@ -52,95 +67,96 @@ footer{padding:20px;font-size:14px;color:#777;}
 
 <header>
   <img src="logo.png" class="logo">
-  <h1 id="title">TAGBASE</h1>
+  <h1>TAGBASE</h1>
   <p>ig: @cinar0zer</p>
   <p id="adminText" class="admin hidden">ADMIN MODU</p>
 </header>
 
-<section>
-
-<!-- ESKİ YAZILAR -->
 <div class="box">
-  <h2>Hakkımızda</h2>
-  <p>
-    TagBase sokak kültürü için POSCA kalem ve graffiti ürünleri satar.<br>
-    Elden teslim vardır, kargo yoktur.<br>
-    📍 Bursa / Mustafakemalpaşa
-  </p>
-</div>
-
-<div class="box">
-  <h2>Ürünler</h2>
-  <p>
-    • Posca Kalemler<br>
-    • Sprey Boyalar<br>
-    • Sokaktan doğdu
-  </p>
-</div>
-
-<div class="box">
-  <h2>İletişim</h2>
-  <p>DM: @cinar0zer</p>
+<h2>Hakkımızda</h2>
+<p>
+TagBase sokak kültürü için POSCA kalem ve graffiti ürünleri satar.<br>
+📍 Bursa / Mustafakemalpaşa
+</p>
 </div>
 
 <!-- ADMIN PANEL -->
 <div class="box hidden" id="adminPanel">
-  <h2>Admin Kontrol</h2>
-  <input type="number" id="adminFiyat" placeholder="Yeni Kalem Fiyatı (TL)">
-  <button onclick="fiyatGuncelle()">Fiyatı Güncelle</button>
-  <textarea id="adminNot" placeholder="Siparişe admin notu"></textarea>
+<h2>Admin Kontrol</h2>
+<input type="number" id="adminFiyat" placeholder="Yeni Kalem Fiyatı">
+<button onclick="fiyatGuncelle()">Fiyat Güncelle</button>
+<button onclick="satisToggle()">Satışı Aç / Kapat</button>
+<button onclick="sepetTemizle()">Sepeti Temizle</button>
 </div>
 
-<!-- SİPARİŞ -->
-<div class="box hidden" id="siparisBox">
-  <h2>POSCA Kalem Siparişi</h2>
+<!-- SHOP -->
+<div class="box hidden" id="shop">
+<h2>POSCA Kalem</h2>
 
-  <form action="https://formspree.io/f/mdakkpzw" method="POST">
-    <input type="hidden" name="Ürün" value="POSCA Kalem">
-    <input type="hidden" name="Toplam Fiyat" id="mailFiyat">
-    <input type="hidden" name="Admin Notu" id="mailAdminNot">
+<select id="renk">
+  <option value="">Renk Seç</option>
+  <option>Siyah</option>
+  <option>Beyaz</option>
+  <option>Kırmızı</option>
+  <option>Mavi</option>
+</select>
 
-    <input type="text" name="Renk" placeholder="Renk" required>
-    <input type="number" id="adet" name="Adet" value="1" min="1" onchange="hesapla()" required>
-    <input type="text" name="Teslim Yeri" placeholder="Teslim Yeri" required>
-    <input type="text" name="İletişim" placeholder="IG / Telefon" required>
+<button onclick="sepeteEkle()">Sepete Ekle</button>
 
-    <p><b>Toplam:</b> <span id="fiyat">170</span> TL</p>
-    <button type="submit">Siparişi Gönder</button>
-  </form>
+<h3>Sepet</h3>
+<p id="sepetYazi">Sepet boş</p>
+<p><b>Toplam:</b> <span id="toplam">0</span> TL</p>
 
-  <button onclick="cikis()">Çıkış Yap</button>
+<p class="orderNo">Sipariş No: <span id="orderNo"></span></p>
+
+<form action="https://formspree.io/f/mdakkpzw" method="POST">
+  <input type="hidden" name="Sipariş No" id="mailOrderNo">
+  <input type="hidden" name="Sipariş Detayı" id="mailSiparis">
+  <input type="hidden" name="Toplam Tutar" id="mailToplam">
+
+  <input type="text" name="İsim Soyisim" placeholder="İsim Soyisim" required>
+  <textarea name="Adres" placeholder="Açık adres" required></textarea>
+  <input type="text" name="İletişim" placeholder="IG / Telefon" required>
+
+  <button type="submit" onclick="siparisTamamla()">Siparişi Gönder</button>
+</form>
+
+<button onclick="cikis()">Çıkış</button>
 </div>
 
-<!-- KAYIT / GİRİŞ (EN ALT) -->
+<!-- LOGIN / REGISTER -->
 <div class="box" id="loginBox">
-  <h2>Kayıt / Giriş</h2>
-  <input type="text" id="user" placeholder="Kullanıcı adı">
-  <input type="password" id="pass" placeholder="Şifre">
-  <button onclick="kayit()">Kayıt Ol</button>
-  <button onclick="giris()">Giriş Yap</button>
+<h2>Kayıt / Giriş</h2>
+<input type="text" id="user" placeholder="Kullanıcı adı">
+<input type="password" id="pass" placeholder="Şifre">
+<button onclick="kayit()">Kayıt Ol</button>
+<button onclick="giris()">Giriş Yap</button>
 </div>
-
-</section>
 
 <footer>© 2026 TagBase</footer>
 
 <script>
-let fiyatTek = localStorage.getItem("fiyat") || 170;
+let fiyat = localStorage.getItem("fiyat") || 170;
+let sepet = {};
+let satisAcik = true;
+
 const adminUser="cinar0zer";
 const adminPass="han11222";
 
-function hesapla(){
-  let adet=adetInput.value;
-  let toplam=adet*fiyatTek;
-  fiyat.innerText=toplam;
-  mailFiyat.value=toplam+" TL";
+// SIPARIS NO
+let lastNo = localStorage.getItem("lastOrder") || 1000;
+let currentNo = "TB-" + (parseInt(lastNo) + 1);
+document.getElementById("orderNo").innerText = currentNo;
+document.getElementById("mailOrderNo").value = currentNo;
+
+function siparisTamamla(){
+  localStorage.setItem("lastOrder", parseInt(lastNo) + 1);
 }
 
 function kayit(){
   if(!user.value||!pass.value) return alert("Boş bırakma");
-  localStorage.setItem("tb_user",user.value);
-  localStorage.setItem("tb_pass",pass.value);
+  localStorage.setItem("u",user.value);
+  localStorage.setItem("p",pass.value);
   alert("Kayıt başarılı");
 }
 
@@ -148,40 +164,56 @@ function giris(){
   if(user.value===adminUser && pass.value===adminPass){
     adminText.classList.remove("hidden");
     adminPanel.classList.remove("hidden");
-    title.classList.add("graffiti");
-  } else {
-    if(user.value!==localStorage.getItem("tb_user") ||
-       pass.value!==localStorage.getItem("tb_pass")){
-      return alert("Hatalı giriş");
-    }
+  } else if(user.value!==localStorage.getItem("u") || pass.value!==localStorage.getItem("p")){
+    return alert("Hatalı giriş");
   }
   loginBox.classList.add("hidden");
-  siparisBox.classList.remove("hidden");
+  shop.classList.remove("hidden");
+}
+
+function sepeteEkle(){
+  if(!satisAcik) return alert("Satış kapalı");
+  if(!renk.value) return alert("Renk seç");
+  sepet[renk.value]=(sepet[renk.value]||0)+1;
+  guncelle();
+}
+
+function guncelle(){
+  let yazi="";
+  let adet=0;
+  for(let r in sepet){
+    yazi+=`${r} x ${sepet[r]}\n`;
+    adet+=sepet[r];
+  }
+  sepetYazi.innerHTML=yazi.replace(/\n/g,"<br>") || "Sepet boş";
+  let t=adet*fiyat;
+  toplam.innerText=t;
+  mailSiparis.value=yazi;
+  mailToplam.value=t+" TL";
 }
 
 function fiyatGuncelle(){
   if(adminFiyat.value>0){
-    fiyatTek=adminFiyat.value;
-    localStorage.setItem("fiyat",fiyatTek);
-    hesapla();
+    fiyat=adminFiyat.value;
+    localStorage.setItem("fiyat",fiyat);
+    guncelle();
     alert("Fiyat güncellendi");
   }
 }
 
-adminNot.addEventListener("input",()=>{
-  mailAdminNot.value=adminNot.value;
-});
-
-function cikis(){
-  siparisBox.classList.add("hidden");
-  adminPanel.classList.add("hidden");
-  loginBox.classList.remove("hidden");
-  adminText.classList.add("hidden");
-  title.classList.remove("graffiti");
+function satisToggle(){
+  satisAcik=!satisAcik;
+  alert(satisAcik?"Satış açık":"Satış kapalı");
 }
 
-const adetInput=document.getElementById("adet");
-hesapla();
+function sepetTemizle(){
+  sepet={};
+  guncelle();
+}
+
+function cikis(){
+  location.reload();
+}
 </script>
 
 </body>
