@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -9,56 +10,44 @@
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:#0b0b0b;
+  background:#0e0e0e;
   color:#fff;
   text-align:center;
 }
 header{
-  padding:60px 20px;
+  padding:40px 20px;
   background:#000;
 }
-.logo{width:150px;margin-bottom:10px;}
-h1{
-  font-size:50px;
-  letter-spacing:4px;
-  animation:flicker 2s infinite;
+header img{
+  width:150px;
+  margin-bottom:15px;
 }
-@keyframes flicker{
-  0%{color:#fff;}
-  50%{color:#ff2d2d;}
-  100%{color:#fff;}
-}
+section{padding:40px 20px;}
 .box{
   max-width:600px;
-  margin:20px auto;
+  margin:auto;
   background:#161616;
   padding:25px;
   border-radius:10px;
+  margin-bottom:20px;
 }
-button,input,select,textarea{
-  width:90%;
+input,select,button{
+  width:100%;
   padding:10px;
-  margin-top:10px;
-  border-radius:6px;
+  margin:8px 0;
+  border-radius:5px;
   border:none;
-  font-size:16px;
 }
 button{
   background:#fff;
-  color:#000;
+  font-weight:bold;
   cursor:pointer;
 }
-button:hover{
-  background:#ff2d2d;
-  color:#fff;
-}
 .hidden{display:none;}
-.admin{color:#ff4444;font-weight:bold;}
-footer{padding:20px;color:#777;}
-.orderNo{
-  color:#00ff99;
-  font-weight:bold;
-  margin-top:10px;
+footer{
+  padding:20px;
+  font-size:14px;
+  color:#777;
 }
 </style>
 </head>
@@ -66,154 +55,112 @@ footer{padding:20px;color:#777;}
 <body>
 
 <header>
-  <img src="logo.png" class="logo">
+  <img src="logo.png" alt="TagBase Logo">
   <h1>TAGBASE</h1>
-  <p>ig: @cinar0zer</p>
-  <p id="adminText" class="admin hidden">ADMIN MODU</p>
+  <p>Sokaktan doğdu.</p>
 </header>
 
-<div class="box">
-<h2>Hakkımızda</h2>
-<p>
-TagBase sokak kültürü için POSCA kalem ve graffiti ürünleri satar.<br>
-📍 Bursa / Mustafakemalpaşa
-</p>
-</div>
+<!-- GİRİŞ / KAYIT -->
+<section id="auth">
+  <div class="box">
+    <h2>Giriş Yap</h2>
+    <input id="loginUser" placeholder="Kullanıcı Adı">
+    <input id="loginPass" type="password" placeholder="Şifre">
+    <button onclick="login()">Giriş</button>
 
-<!-- ADMIN PANEL -->
-<div class="box hidden" id="adminPanel">
-<h2>Admin Kontrol</h2>
-<input type="number" id="adminFiyat" placeholder="Yeni Kalem Fiyatı">
-<button onclick="fiyatGuncelle()">Fiyat Güncelle</button>
-<button onclick="satisToggle()">Satışı Aç / Kapat</button>
-<button onclick="sepetTemizle()">Sepeti Temizle</button>
-</div>
+    <hr>
 
-<!-- SHOP -->
-<div class="box hidden" id="shop">
-<h2>POSCA Kalem</h2>
+    <h3>Kayıt Ol</h3>
+    <input id="regUser" placeholder="Kullanıcı Adı">
+    <input id="regPass" type="password" placeholder="Şifre">
+    <button onclick="register()">Kayıt Ol</button>
+  </div>
+</section>
 
-<select id="renk">
-  <option value="">Renk Seç</option>
-  <option>Siyah</option>
-  <option>Beyaz</option>
-  <option>Kırmızı</option>
-  <option>Mavi</option>
-</select>
+<!-- SİTE -->
+<section id="site" class="hidden">
 
-<button onclick="sepeteEkle()">Sepete Ekle</button>
+  <div class="box">
+    <h2>Hakkımızda</h2>
+    <p>
+      TagBase sokak stilleri için Posca kalem ve graffiti ekipmanları satar.
+      Elden teslim: Bursa / Mustafakemalpaşa
+    </p>
+  </div>
 
-<h3>Sepet</h3>
-<p id="sepetYazi">Sepet boş</p>
-<p><b>Toplam:</b> <span id="toplam">0</span> TL</p>
+  <div class="box">
+    <h2>Sipariş Ver</h2>
 
-<p class="orderNo">Sipariş No: <span id="orderNo"></span></p>
+    <form action="https://formspree.io/f/mdakkpzw" method="POST">
 
-<form action="https://formspree.io/f/mdakkpzw" method="POST">
-  <input type="hidden" name="Sipariş No" id="mailOrderNo">
-  <input type="hidden" name="Sipariş Detayı" id="mailSiparis">
-  <input type="hidden" name="Toplam Tutar" id="mailToplam">
+      <input name="siparis_no" id="siparisNo" readonly>
 
-  <input type="text" name="İsim Soyisim" placeholder="İsim Soyisim" required>
-  <textarea name="Adres" placeholder="Açık adres" required></textarea>
-  <input type="text" name="İletişim" placeholder="IG / Telefon" required>
+      <input name="isim" placeholder="İsim Soyisim" required>
+      <input name="adres" placeholder="Adres" required>
 
-  <button type="submit" onclick="siparisTamamla()">Siparişi Gönder</button>
-</form>
+      <select name="urun">
+        <option>Posca Kalem</option>
+      </select>
 
-<button onclick="cikis()">Çıkış</button>
-</div>
+      <select name="renk" required>
+        <option value="">Renk Seç</option>
+        <option>Siyah</option>
+        <option>Beyaz</option>
+        <option>Kırmızı</option>
+        <option>Mavi</option>
+      </select>
 
-<!-- LOGIN / REGISTER -->
-<div class="box" id="loginBox">
-<h2>Kayıt / Giriş</h2>
-<input type="text" id="user" placeholder="Kullanıcı adı">
-<input type="password" id="pass" placeholder="Şifre">
-<button onclick="kayit()">Kayıt Ol</button>
-<button onclick="giris()">Giriş Yap</button>
-</div>
+      <select id="adet" name="adet" onchange="hesapla()" required>
+        <option value="1">1 Adet</option>
+        <option value="2">2 Adet</option>
+        <option value="3">3 Adet</option>
+      </select>
 
-<footer>© 2026 TagBase</footer>
+      <input name="fiyat" id="fiyat" readonly>
+
+      <button type="submit">Siparişi Gönder</button>
+    </form>
+  </div>
+
+</section>
+
+<footer>
+© 2026 TagBase | @cinar0zer
+</footer>
 
 <script>
-let fiyat = localStorage.getItem("fiyat") || 170;
-let sepet = {};
-let satisAcik = true;
-
-const adminUser="cinar0zer";
-const adminPass="han11222";
-
-// SIPARIS NO
-let lastNo = localStorage.getItem("lastOrder") || 1000;
-let currentNo = "TB-" + (parseInt(lastNo) + 1);
-document.getElementById("orderNo").innerText = currentNo;
-document.getElementById("mailOrderNo").value = currentNo;
-
-function siparisTamamla(){
-  localStorage.setItem("lastOrder", parseInt(lastNo) + 1);
-}
-
-function kayit(){
-  if(!user.value||!pass.value) return alert("Boş bırakma");
-  localStorage.setItem("u",user.value);
-  localStorage.setItem("p",pass.value);
+function register(){
+  localStorage.setItem(
+    document.getElementById("regUser").value,
+    document.getElementById("regPass").value
+  );
   alert("Kayıt başarılı");
 }
 
-function giris(){
-  if(user.value===adminUser && pass.value===adminPass){
-    adminText.classList.remove("hidden");
-    adminPanel.classList.remove("hidden");
-  } else if(user.value!==localStorage.getItem("u") || pass.value!==localStorage.getItem("p")){
-    return alert("Hatalı giriş");
+function login(){
+  let u=document.getElementById("loginUser").value;
+  let p=document.getElementById("loginPass").value;
+
+  if(u==="cinar0zer" && p==="han11222"){
+    alert("Admin girişi");
   }
-  loginBox.classList.add("hidden");
-  shop.classList.remove("hidden");
-}
 
-function sepeteEkle(){
-  if(!satisAcik) return alert("Satış kapalı");
-  if(!renk.value) return alert("Renk seç");
-  sepet[renk.value]=(sepet[renk.value]||0)+1;
-  guncelle();
-}
-
-function guncelle(){
-  let yazi="";
-  let adet=0;
-  for(let r in sepet){
-    yazi+=`${r} x ${sepet[r]}\n`;
-    adet+=sepet[r];
-  }
-  sepetYazi.innerHTML=yazi.replace(/\n/g,"<br>") || "Sepet boş";
-  let t=adet*fiyat;
-  toplam.innerText=t;
-  mailSiparis.value=yazi;
-  mailToplam.value=t+" TL";
-}
-
-function fiyatGuncelle(){
-  if(adminFiyat.value>0){
-    fiyat=adminFiyat.value;
-    localStorage.setItem("fiyat",fiyat);
-    guncelle();
-    alert("Fiyat güncellendi");
+  if(localStorage.getItem(u)===p || (u==="cinar0zer" && p==="han11222")){
+    document.getElementById("auth").classList.add("hidden");
+    document.getElementById("site").classList.remove("hidden");
+  }else{
+    alert("Hatalı giriş");
   }
 }
 
-function satisToggle(){
-  satisAcik=!satisAcik;
-  alert(satisAcik?"Satış açık":"Satış kapalı");
+function hesapla(){
+  let adet=document.getElementById("adet").value;
+  document.getElementById("fiyat").value=(adet*170)+" TL";
 }
 
-function sepetTemizle(){
-  sepet={};
-  guncelle();
-}
-
-function cikis(){
-  location.reload();
-}
+document.getElementById("siparisNo").value =
+  "TB-"+Math.floor(Math.random()*100000);
+hesapla();
 </script>
 
 </body>
