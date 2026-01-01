@@ -5,7 +5,6 @@
 <title>TagBase</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- GRAFFITI FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
 
 <style>
@@ -17,7 +16,6 @@ body{
   background:
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05), transparent 40%),
     radial-gradient(circle at 80% 60%, rgba(255,255,255,0.04), transparent 45%),
-    radial-gradient(circle at 50% 90%, rgba(255,255,255,0.03), transparent 50%),
     #0e0e0e;
 }
 
@@ -26,20 +24,13 @@ header{
   background:#000;
 }
 
-header img{
-  width:160px;
-  margin-bottom:10px;
-}
-
+header img{width:160px;}
 header h1{
   font-family:'Rubik Wet Paint', cursive;
   font-size:56px;
-  letter-spacing:3px;
 }
 
-section{
-  padding:40px 20px;
-}
+section{padding:40px 20px;}
 
 .box{
   max-width:600px;
@@ -48,7 +39,6 @@ section{
   padding:25px;
   border-radius:12px;
   margin-bottom:20px;
-  box-shadow:0 0 20px rgba(0,0,0,0.6);
 }
 
 input, select, button{
@@ -61,117 +51,108 @@ input, select, button{
 
 button{
   background:#fff;
-  color:#000;
   font-weight:bold;
   cursor:pointer;
 }
 
-footer{
-  padding:20px;
-  font-size:14px;
-  color:#777;
+button:disabled{
+  background:#555;
+  cursor:not-allowed;
 }
+
+footer{color:#777;font-size:14px;padding:20px;}
 </style>
 </head>
 
 <body>
 
 <header>
-  <img src="logo.png" alt="TagBase Logo">
+  <img src="logo.png">
   <h1>TAGBASE</h1>
   <p>Sokaktan doğdu.</p>
 </header>
 
 <section>
 
-  <div class="box">
-    <h2>Hakkımızda</h2>
-    <p>
-      TagBase, graffiti ve sokak kültürü için Posca kalem satışı yapar.<br>
-      Elden teslim vardır, kargo yoktur.
-      <br><br>
-      📍 Bursa / Mustafakemalpaşa
-    </p>
-  </div>
+<div class="box">
+<h2>Hakkımızda</h2>
+<p>Graffiti ve sokak kültürü için Posca kalem satışı.<br>
+📍 Bursa / Mustafakemalpaşa</p>
+</div>
 
-  <div class="box">
-    <h2>Ürünler</h2>
-    <p>
-      • Posca Kalem<br>
-      • Graffiti Marker<br>
-      • Sticker & Tag ekipmanları
-    </p>
-  </div>
+<div class="box">
+<h2>Sipariş Ver</h2>
 
-  <div class="box">
-    <h2>Sipariş Ver</h2>
+<p id="uyari" style="color:#ff5555;">
+⚠️ Sipariş vermek için giriş yapmalısın
+</p>
 
-    <form action="https://formspree.io/f/mdakkpzw" method="POST">
+<form action="https://formspree.io/f/mdakkpzw" method="POST" onsubmit="return siparisKontrol()">
 
-      <!-- ADMIN'E KOPYA -->
-      <input type="hidden" name="_cc" value="ADMIN_MAIL@MAIL.COM">
-      <input type="hidden" name="_subject" value="Yeni TagBase Siparişi">
+<input type="hidden" name="_cc" value="ADMIN_MAIL@MAIL.COM">
+<input type="hidden" name="_subject" value="Yeni TagBase Siparişi">
 
-      <input name="siparis_no" id="siparisNo" readonly>
+<input name="siparis_no" id="siparisNo" readonly>
 
-      <input name="isim_soyisim" placeholder="İsim Soyisim" required>
-      <input name="adres" placeholder="Adres" required>
+<input name="isim_soyisim" placeholder="İsim Soyisim" required>
+<input name="adres" placeholder="Adres" required>
 
-      <select name="urun">
-        <option>Posca Kalem</option>
-      </select>
+<select name="renk" required>
+<option value="">Renk Seç</option>
+<option>Siyah</option>
+<option>Beyaz</option>
+<option>Kırmızı</option>
+<option>Mavi</option>
+</select>
 
-      <select name="renk" required>
-        <option value="">Renk Seç</option>
-        <option>Siyah</option>
-        <option>Beyaz</option>
-        <option>Kırmızı</option>
-        <option>Mavi</option>
-      </select>
+<select id="adet" name="adet" onchange="hesapla()" required>
+<option value="1">1 Adet</option>
+<option value="2">2 Adet</option>
+<option value="3">3 Adet</option>
+</select>
 
-      <select id="adet" name="adet" onchange="hesapla()" required>
-        <option value="1">1 Adet</option>
-        <option value="2">2 Adet</option>
-        <option value="3">3 Adet</option>
-      </select>
+<input name="fiyat" id="fiyat" readonly>
 
-      <input name="fiyat" id="fiyat" readonly>
+<button id="siparisBtn" type="submit" disabled>
+Siparişi Gönder
+</button>
 
-      <button type="submit">Siparişi Gönder</button>
-    </form>
-  </div>
+</form>
+</div>
 
-  <div class="box">
-    <h2>Giriş / Kayıt</h2>
+<div class="box">
+<h2>Giriş / Kayıt</h2>
 
-    <input id="loginUser" placeholder="Kullanıcı Adı">
-    <input id="loginPass" type="password" placeholder="Şifre">
-    <button onclick="login()">Giriş Yap</button>
+<input id="loginUser" placeholder="Kullanıcı Adı">
+<input id="loginPass" type="password" placeholder="Şifre">
+<button onclick="login()">Giriş Yap</button>
 
-    <hr>
+<hr>
 
-    <input id="regUser" placeholder="Yeni Kullanıcı Adı">
-    <input id="regPass" type="password" placeholder="Yeni Şifre">
-    <button onclick="register()">Kayıt Ol</button>
+<input id="regUser" placeholder="Yeni Kullanıcı Adı">
+<input id="regPass" type="password" placeholder="Yeni Şifre">
+<button onclick="register()">Kayıt Ol</button>
 
-    <p style="font-size:13px;color:#aaa;">
-      Admin: cinar0zer / han11222
-    </p>
-  </div>
+<p style="font-size:13px;color:#aaa;">
+Admin: cinar0zer / han11222
+</p>
+</div>
 
 </section>
 
 <footer>
-© 2026 TagBase | @cinar0zer
+© 2026 TagBase
 </footer>
 
 <script>
+let girisYapildi=false;
+
 function register(){
   localStorage.setItem(
     document.getElementById("regUser").value,
     document.getElementById("regPass").value
   );
-  alert("Kayıt başarılı");
+  alert("Kayıt başarılı, şimdi giriş yap");
 }
 
 function login(){
@@ -182,10 +163,21 @@ function login(){
     localStorage.getItem(u)===p ||
     (u==="cinar0zer" && p==="han11222")
   ){
+    girisYapildi=true;
+    document.getElementById("siparisBtn").disabled=false;
+    document.getElementById("uyari").innerText="✅ Giriş yapıldı, sipariş verebilirsin";
     alert("Giriş başarılı");
   }else{
     alert("Hatalı giriş");
   }
+}
+
+function siparisKontrol(){
+  if(!girisYapildi){
+    alert("Önce giriş yapmalısın");
+    return false;
+  }
+  return true;
 }
 
 function hesapla(){
