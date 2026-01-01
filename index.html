@@ -4,34 +4,22 @@
 <meta charset="UTF-8">
 <title>TagBase</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#0e0e0e;
   color:#fff;
   text-align:center;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05), transparent 40%),
-    radial-gradient(circle at 80% 60%, rgba(255,255,255,0.04), transparent 45%),
-    #0e0e0e;
 }
-
-header{
-  padding:50px 20px;
-  background:#000;
-}
-
-header img{width:160px;}
+header{background:#000;padding:40px;}
 header h1{
   font-family:'Rubik Wet Paint', cursive;
   font-size:56px;
 }
-
 section{padding:40px 20px;}
-
 .box{
   max-width:600px;
   margin:auto;
@@ -40,154 +28,144 @@ section{padding:40px 20px;}
   border-radius:12px;
   margin-bottom:20px;
 }
-
-input, select, button{
+input,select,button{
   width:100%;
   padding:12px;
   margin:8px 0;
   border-radius:6px;
   border:none;
 }
-
-button{
-  background:#fff;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button:disabled{
-  background:#555;
-  cursor:not-allowed;
-}
-
-footer{color:#777;font-size:14px;padding:20px;}
+button{font-weight:bold;cursor:pointer;}
+button:disabled{background:#444;}
+.admin{border:2px dashed #ff5555;}
 </style>
 </head>
 
 <body>
 
 <header>
-  <img src="logo.png">
-  <h1>TAGBASE</h1>
-  <p>Sokaktan doğdu.</p>
+<h1>TAGBASE</h1>
+<p>Sokaktan doğdu.</p>
 </header>
 
 <section>
 
 <div class="box">
 <h2>Hakkımızda</h2>
-<p>Graffiti ve sokak kültürü için Posca kalem satışı.<br>
-📍 Bursa / Mustafakemalpaşa</p>
+<p>Graffiti ve Posca kalem satışı.<br>📍 Bursa / Mustafakemalpaşa</p>
 </div>
 
 <div class="box">
-<h2>Sipariş Ver</h2>
+<h2>Ürün</h2>
+<p>Posca Kalem</p>
+<p>Stok: <span id="stok"></span></p>
+<p>Fiyat: <span id="fiyatGoster"></span> TL</p>
+</div>
 
-<p id="uyari" style="color:#ff5555;">
-⚠️ Sipariş vermek için giriş yapmalısın
-</p>
+<div class="box">
+<h2>Sipariş</h2>
+<p id="uyari" style="color:#ff5555;">⚠️ Giriş yapmadan sipariş yok</p>
 
 <form action="https://formspree.io/f/mdakkpzw" method="POST" onsubmit="return siparisKontrol()">
 
 <input type="hidden" name="_cc" value="ADMIN_MAIL@MAIL.COM">
-<input type="hidden" name="_subject" value="Yeni TagBase Siparişi">
-
 <input name="siparis_no" id="siparisNo" readonly>
 
-<input name="isim_soyisim" placeholder="İsim Soyisim" required>
+<input name="isim" placeholder="İsim Soyisim" required>
 <input name="adres" placeholder="Adres" required>
 
-<select name="renk" required>
-<option value="">Renk Seç</option>
-<option>Siyah</option>
-<option>Beyaz</option>
-<option>Kırmızı</option>
-<option>Mavi</option>
-</select>
+<select id="adet" name="adet" onchange="hesapla()" required></select>
 
-<select id="adet" name="adet" onchange="hesapla()" required>
-<option value="1">1 Adet</option>
-<option value="2">2 Adet</option>
-<option value="3">3 Adet</option>
-</select>
+<input name="tutar" id="tutar" readonly>
 
-<input name="fiyat" id="fiyat" readonly>
-
-<button id="siparisBtn" type="submit" disabled>
-Siparişi Gönder
-</button>
-
+<button id="siparisBtn" disabled>Siparişi Gönder</button>
 </form>
 </div>
 
 <div class="box">
-<h2>Giriş / Kayıt</h2>
-
-<input id="loginUser" placeholder="Kullanıcı Adı">
-<input id="loginPass" type="password" placeholder="Şifre">
+<h2>Giriş</h2>
+<input id="user">
+<input id="pass" type="password">
 <button onclick="login()">Giriş Yap</button>
+</div>
 
-<hr>
+<div class="box admin" id="adminPanel" style="display:none;">
+<h2>ADMIN PANEL</h2>
 
-<input id="regUser" placeholder="Yeni Kullanıcı Adı">
-<input id="regPass" type="password" placeholder="Yeni Şifre">
-<button onclick="register()">Kayıt Ol</button>
+<label>Fiyat Değiştir (₺)</label>
+<input id="adminFiyat" type="number">
+<button onclick="fiyatDegistir()">Kaydet</button>
 
-<p style="font-size:13px;color:#aaa;">
-Admin: cinar0zer / han11222
-</p>
+<label>Stok</label>
+<input id="adminStok" type="number">
+<button onclick="stokDegistir()">Kaydet</button>
+
+<select>
+<option>⏳ Beklemede</option>
+<option>✅ Onaylandı</option>
+<option>❌ Reddedildi</option>
+</select>
 </div>
 
 </section>
 
-<footer>
-© 2026 TagBase
-</footer>
-
 <script>
-let girisYapildi=false;
+let admin=false;
+let giris=false;
 
-function register(){
-  localStorage.setItem(
-    document.getElementById("regUser").value,
-    document.getElementById("regPass").value
-  );
-  alert("Kayıt başarılı, şimdi giriş yap");
+let fiyat=localStorage.getItem("fiyat") || 170;
+let stok=localStorage.getItem("stok") || 10;
+
+function guncelle(){
+  document.getElementById("stok").innerText=stok;
+  document.getElementById("fiyatGoster").innerText=fiyat;
+  document.getElementById("adet").innerHTML="";
+  for(let i=1;i<=stok;i++){
+    document.getElementById("adet").innerHTML+=
+      `<option value="${i}">${i} Adet</option>`;
+  }
+}
+
+function hesapla(){
+  let a=document.getElementById("adet").value;
+  document.getElementById("tutar").value=(a*fiyat)+" TL";
 }
 
 function login(){
-  let u=document.getElementById("loginUser").value;
-  let p=document.getElementById("loginPass").value;
-
-  if(
-    localStorage.getItem(u)===p ||
-    (u==="cinar0zer" && p==="han11222")
-  ){
-    girisYapildi=true;
+  let u=user.value,p=pass.value;
+  if(u==="cinar0zer" && p==="han11222"){
+    admin=true;
+    document.getElementById("adminPanel").style.display="block";
+  }
+  if(localStorage.getItem(u)===p || admin){
+    giris=true;
     document.getElementById("siparisBtn").disabled=false;
-    document.getElementById("uyari").innerText="✅ Giriş yapıldı, sipariş verebilirsin";
-    alert("Giriş başarılı");
-  }else{
-    alert("Hatalı giriş");
+    document.getElementById("uyari").innerText="✅ Sipariş verebilirsin";
   }
 }
 
 function siparisKontrol(){
-  if(!girisYapildi){
-    alert("Önce giriş yapmalısın");
-    return false;
-  }
+  if(!giris) return false;
+  stok--;
+  localStorage.setItem("stok",stok);
+  guncelle();
   return true;
 }
 
-function hesapla(){
-  let adet=document.getElementById("adet").value;
-  document.getElementById("fiyat").value=(adet*170)+" TL";
+function fiyatDegistir(){
+  fiyat=adminFiyat.value;
+  localStorage.setItem("fiyat",fiyat);
+  guncelle();
 }
 
-document.getElementById("siparisNo").value =
-  "TB-" + Math.floor(Math.random()*1000000);
+function stokDegistir(){
+  stok=adminStok.value;
+  localStorage.setItem("stok",stok);
+  guncelle();
+}
 
+document.getElementById("siparisNo").value="TB-"+Math.floor(Math.random()*999999);
+guncelle();
 hesapla();
 </script>
 
