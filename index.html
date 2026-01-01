@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>TagBase</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body {
   margin:0;
@@ -20,7 +21,18 @@ header {
   width:160px;
   margin-bottom:15px;
 }
-h1 { font-size:48px; letter-spacing:2px; }
+h1 {
+  font-size:48px;
+  letter-spacing:3px;
+}
+.graffiti {
+  animation: flicker 2s infinite;
+}
+@keyframes flicker {
+  0% { color:#fff; }
+  50% { color:#ff2d2d; }
+  100% { color:#fff; }
+}
 section { padding:40px 20px; }
 .box {
   max-width:600px;
@@ -30,7 +42,7 @@ section { padding:40px 20px; }
   border-radius:10px;
   margin-bottom:20px;
 }
-input, button {
+input, button, textarea {
   width:90%;
   padding:10px;
   margin-top:8px;
@@ -44,6 +56,10 @@ button {
   cursor:pointer;
 }
 .hidden { display:none; }
+.admin {
+  color:#ff4d4d;
+  font-weight:bold;
+}
 footer {
   padding:20px;
   font-size:14px;
@@ -51,25 +67,53 @@ footer {
 }
 </style>
 </head>
+
 <body>
 
 <header>
   <img src="logo.png" class="logo">
-  <h1>TAGBASE</h1>
+  <h1 id="title">TAGBASE</h1>
   <p>ig: @cinar0zer</p>
+  <p id="adminText" class="admin hidden">ADMIN MODU AKTİF</p>
 </header>
 
 <section>
 
-<!-- LOGIN / REGISTER -->
-<div class="box" id="loginBox">
-  <h2>Giriş / Kayıt</h2>
+<!-- ESKİ YAZILAR -->
+<div class="box">
+  <h2>Hakkımızda</h2>
+  <p>
+    TagBase sokak kültürü için POSCA kalem ve graffiti ürünleri satar.  
+    Elden teslim vardır, kargo yoktur.  
+    📍 Bursa / Mustafakemalpaşa
+  </p>
+</div>
 
-  <input type="text" id="user" placeholder="Kullanıcı adı">
-  <input type="password" id="pass" placeholder="Şifre">
+<div class="box">
+  <h2>Ürünler</h2>
+  <p>
+    • Posca Kalemler<br>
+    • Sprey Boyalar<br>
+    • Sokaktan doğdu
+  </p>
+</div>
 
-  <button onclick="kayit()">Kayıt Ol</button>
-  <button onclick="giris()">Giriş Yap</button>
+<div class="box">
+  <h2>İletişim</h2>
+  <p>
+    DM üzerinden ulaşabilirsiniz<br>
+    IG: @cinar0zer
+  </p>
+</div>
+
+<!-- ADMIN PANEL (GİZLİ) -->
+<div class="box hidden" id="adminPanel">
+  <h2>Admin Kontrol</h2>
+
+  <input type="number" id="adminFiyat" placeholder="Yeni Kalem Fiyatı (TL)">
+  <button onclick="fiyatGuncelle()">Fiyatı Güncelle</button>
+
+  <textarea id="adminNot" placeholder="Siparişe admin notu"></textarea>
 </div>
 
 <!-- SİPARİŞ -->
@@ -79,6 +123,7 @@ footer {
   <form action="https://formspree.io/f/mdakkpzw" method="POST">
     <input type="hidden" name="Ürün" value="POSCA Kalem">
     <input type="hidden" name="Toplam Fiyat" id="mailFiyat">
+    <input type="hidden" name="Admin Notu" id="mailAdminNot">
 
     <input type="text" name="Renk" placeholder="Renk" required>
     <input type="number" id="adet" name="Adet" value="1" min="1" onchange="hesapla()" required>
@@ -93,6 +138,14 @@ footer {
   <button onclick="cikis()" style="margin-top:10px;">Çıkış Yap</button>
 </div>
 
+<!-- GİRİŞ EN ALT -->
+<div class="box" id="loginBox">
+  <h2>Giriş Yap</h2>
+  <input type="text" id="user" placeholder="Kullanıcı adı">
+  <input type="password" id="pass" placeholder="Şifre">
+  <button onclick="giris()">Giriş</button>
+</div>
+
 </section>
 
 <footer>
@@ -100,7 +153,10 @@ footer {
 </footer>
 
 <script>
-const fiyatTek = 170;
+let fiyatTek = localStorage.getItem("fiyat") || 170;
+
+const adminUser = "cinar0zer";
+const adminPass = "han11222";
 
 function hesapla(){
   let adet = document.getElementById("adet").value;
@@ -109,33 +165,43 @@ function hesapla(){
   document.getElementById("mailFiyat").value = toplam + " TL";
 }
 
-function kayit(){
+function giris(){
   let u = user.value;
   let p = pass.value;
-  if(!u || !p) return alert("Boş bırakma");
-  localStorage.setItem("tb_user", u);
-  localStorage.setItem("tb_pass", p);
-  alert("Kayıt başarılı");
-}
 
-function giris(){
-  if(user.value === localStorage.getItem("tb_user") &&
-     pass.value === localStorage.getItem("tb_pass")){
-      loginBox.classList.add("hidden");
-      siparisBox.classList.remove("hidden");
-  } else {
-    alert("Hatalı giriş");
+  loginBox.classList.add("hidden");
+  siparisBox.classList.remove("hidden");
+
+  if(u === adminUser && p === adminPass){
+    adminText.classList.remove("hidden");
+    adminPanel.classList.remove("hidden");
+    title.classList.add("graffiti");
   }
 }
 
-function cikis(){
-  siparisBox.classList.add("hidden");
-  loginBox.classList.remove("hidden");
+function fiyatGuncelle(){
+  let yeni = document.getElementById("adminFiyat").value;
+  if(yeni > 0){
+    fiyatTek = yeni;
+    localStorage.setItem("fiyat", yeni);
+    hesapla();
+    alert("Fiyat güncellendi");
+  }
 }
 
-if(localStorage.getItem("tb_user")){
+document.getElementById("adminNot").addEventListener("input", () => {
+  document.getElementById("mailAdminNot").value =
+    document.getElementById("adminNot").value;
+});
+
+function cikis(){
+  siparisBox.classList.add("hidden");
+  adminPanel.classList.add("hidden");
   loginBox.classList.remove("hidden");
+  adminText.classList.add("hidden");
+  title.classList.remove("graffiti");
 }
+
 hesapla();
 </script>
 
