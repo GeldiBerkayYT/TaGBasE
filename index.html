@@ -1,230 +1,318 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>TagBase</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Graffiti Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
-  
-  <style>
-    /* Geneli */
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: url('https://i.ibb.co/XtK9X6q/spray-bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<title>TagBase</title>
 
-    /* Header */
-    header {
-      padding: 60px 20px;
-      background: rgba(0,0,0,0.7);
-    }
-    header h1 {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 60px;
-      margin-bottom: 10px;
-    }
-    header p {
-      color: #ccc;
-      font-size: 18px;
-    }
+<!-- Graffiti font -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
 
-    /* Boxes */
-    section {
-      padding: 40px 20px;
-    }
-    .box {
-      max-width: 600px;
-      margin: auto;
-      background: rgba(22,22,22,0.9);
-      padding: 25px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
+<style>
+body{
+  margin:0;
+  color:#fff;
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, #222, #000),
+    url("https://i.imgur.com/6IUbEMK.png");
+  background-size: cover;
+  background-attachment: fixed;
+  text-align:center;
+}
 
-    /* Admin */
-    .admin-panel {
-      margin-top: 40px;
-      background: rgba(0,0,0,0.8);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    .admin-panel input, .admin-panel button {
-      padding: 10px;
-      margin: 5px 0;
-      width: 80%;
-      font-size: 16px;
-    }
+h1,h2,h3{
+  font-family: 'Rubik Wet Paint', cursive;
+  letter-spacing:2px;
+  animation: graffitiAnim 4s infinite alternate;
+}
 
-    /* Form */
-    input, select {
-      padding: 10px;
-      margin: 5px 0;
-      width: 90%;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 18px;
-      background: #ff4d4d;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      color: #fff;
-    }
-    button:hover { background: #ff1a1a; }
+header{
+  padding:40px;
+  background:rgba(0,0,0,0.7);
+}
 
-    /* Footer */
-    footer {
-      padding: 20px;
-      font-size: 14px;
-      color: #777;
-    }
+section{padding:20px;}
+.box{
+  background:rgba(0,0,0,0.7);
+  max-width:600px;
+  margin:20px auto;
+  padding:20px;
+  border-radius:10px;
+  transition: transform 0.3s;
+}
+.box:hover{transform: scale(1.02);}
 
-    /* Mobil */
-    @media (max-width: 600px){
-      header h1 { font-size: 40px; }
-      .box { width: 90%; padding: 15px; }
-      input, button { width: 95%; }
-    }
-  </style>
+input,select,button,textarea{
+  width:90%;
+  max-width:300px;
+  padding:8px;
+  margin:5px;
+}
+button{
+  background:#ff2e2e;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+
+.hidden{display:none;}
+hr{margin:30px 0;}
+
+@keyframes graffitiAnim{
+  0%{text-shadow: 0 0 2px #ff2e2e;}
+  25%{text-shadow: 0 0 4px #ff2e2e, 0 0 6px #fff;}
+  50%{text-shadow: 0 0 3px #ff2e2e, 0 0 6px #0ff;}
+  75%{text-shadow: 0 0 5px #ff2e2e, 0 0 7px #ff0;}
+  100%{text-shadow: 0 0 6px #ff2e2e, 0 0 8px #f0f;}
+}
+
+@media (max-width:600px){
+  body{font-size:14px;}
+  h1{font-size:36px;}
+  h2{font-size:28px;}
+  h3{font-size:22px;}
+  input,select,button,textarea{width:95%;}
+}
+</style>
 </head>
 
 <body>
+
 <header>
-  <img src="image.png" alt="Logo" style="width:150px; margin-bottom:15px;">
+  <img src="image.png" width="180"><br>
   <h1>TAGBASE</h1>
-  <p>IG: cinar0zer</p>
+  <p>ig: cinar0zer</p>
 </header>
 
+<!-- Hakkımızda -->
 <section>
-  <!-- Hakkımızda -->
-  <div class="box">
-    <h2>Hakkımızda</h2>
-    <p>
-      TagBase daha çok sokak stilleri için uygun olan POSCA kalem ve taglar için kalem satış yapılacaktır.
-      Elden teslim yapılır, kargo yoktur. Alımlar Bursa/Mustafakemalpaşa’dan yapılır.
-    </p>
-  </div>
+<div class="box">
+<h2>Hakkımızda</h2>
+<p>
+TaGBasE sokak stilleri için POSCA kalem ve TAG ürünleri satar.  
+Elden teslim vardır – Kargo yok.  
+📍 Bursa / Mustafakemalpaşa
+</p>
+</div>
 
-  <!-- Ürünler -->
-  <div class="box">
-    <h2>Ürünler</h2>
-    <p>
-      • Sprey Boyalar<br>
-      • Posca Kalemler<br>
-    </p>
-  </div>
+<div class="box">
+<h2>Ürünler</h2>
+<p>
+• Posca Kalem<br>
+• Sprey Boya<br>
+• Street ekipmanları
+</p>
+</div>
 
-  <!-- Sipariş Formu -->
-  <div class="box">
-    <h2>Sipariş Ver</h2>
-    <form onsubmit="return sendOrder()">
-      <input name="isim" required placeholder="İsim">
-      <input name="adres" required placeholder="Adres">
-      <input name="urun" value="Posca Kalem" readonly>
-      <input name="renk" required placeholder="Renk">
-      <input id="adet" type="number" min="1" value="1" required>
-      <button type="submit">Sipariş Ver</button>
-    </form>
-  </div>
-
-  <!-- Reklam -->
-  <div class="box">
-    <h2>Reklam</h2>
-    <p id="reklamText">Varsayılan reklam buraya gelecek.</p>
-  </div>
-
-  <!-- Admin Panel -->
-  <div class="box admin-panel">
-    <h2>Admin Paneli (Giriş: cinar0zer / han11222)</h2>
-    <input type="text" id="adminReklam" placeholder="Yeni reklam">
-    <button onclick="updateReklam()">Reklamı Kaydet</button>
-  </div>
+<!-- REKLAM / DUYURU -->
+<section id="reklamSection">
+<div class="box">
+<h2>Street Wall</h2>
+<p id="reklamText" style="font-style:italic;color:#aaa">
+“Duvarlar konuşur, biz yazarız.”<br>
+🔥 Yeni POSCA renkleri yakında geliyor.
+</p>
+</div>
 </section>
 
-<footer>
-  © 2026 TagBase bir @cinar0zer aracıdır
+<!-- Giriş / Kayıt -->
+<section>
+<div class="box">
+<h2>Giriş</h2>
+<input id="loginUser" placeholder="Kullanıcı adı">
+<input id="loginPass" type="password">
+<button onclick="login()">Giriş</button>
+</div>
+
+<div class="box">
+<h2>Kayıt Ol</h2>
+<input id="regUser" placeholder="Yeni kullanıcı adı">
+<input id="regPass" type="password">
+<button onclick="register()">Kayıt</button>
+<p style="font-size:12px;color:#aaa">Kayıt olmadan sipariş veremezsin.</p>
+</div>
+</section>
+
+<!-- Sipariş -->
+<section id="orderArea" class="hidden">
+<div class="box">
+<h2>Sipariş Ver</h2>
+
+<form action="https://formspree.io/f/mdakkpzw" method="POST" onsubmit="return sendOrder()">
+
+<input name="siparis_no" id="orderNo" readonly>
+<input name="isim" placeholder="İsim Soyisim" required>
+<input name="adres" placeholder="Adres" required>
+
+<select name="urun">
+<option>Posca Kalem</option>
+</select>
+
+<select name="renk" required>
+<option value="">Renk</option>
+<option>Siyah</option>
+<option>Beyaz</option>
+<option>Kırmızı</option>
+<option>Mavi</option>
+</select>
+
+<input type="number" id="adet" name="adet" value="1" min="1" oninput="hesapla()" required>
+<input name="toplam_fiyat" id="fiyat" readonly>
+
+<button type="submit">Siparişi Gönder</button>
+</form>
+</div>
+</section>
+
+<!-- Admin Panel -->
+<section id="adminPanel" class="hidden">
+<div class="box">
+<h2>ADMIN PANEL</h2>
+
+<p><b>Toplam Kayıtlı Kullanıcı:</b></p>
+<h1 id="userCount">0</h1>
+
+<hr>
+
+<p>Stok</p>
+<input id="stok" type="number" value="20">
+
+<p>Birim Fiyat (TL)</p>
+<input id="birimFiyat" type="number" value="170">
+
+<hr>
+<h3>Reklam / Duyuru Düzenle</h3>
+<textarea id="adminReklam" rows="4"></textarea><br>
+<button onclick="updateReklam()">Kaydet</button>
+
+<hr>
+<h3>Kontrol Listesi</h3>
+<div id="checklist">
+  <label><input type="checkbox" id="chk1"> Site açılıyor mu?</label><br>
+  <label><input type="checkbox" id="chk2"> Arka plan spray efekti çalışıyor mu?</label><br>
+  <label><input type="checkbox" id="chk3"> Graffiti font ve animasyon başlıklarda çalışıyor mu?</label><br>
+  <label><input type="checkbox" id="chk4"> Mobil görünüm responsive mi?</label><br>
+  <label><input type="checkbox" id="chk5"> Hakkımızda yazısı görünüyor mu?</label><br>
+  <label><input type="checkbox" id="chk6"> Ürünler listesi doğru mu?</label><br>
+  <label><input type="checkbox" id="chk7"> Street Wall / reklam alanı görünüyor mu?</label><br>
+  <label><input type="checkbox" id="chk8"> Logo görünüyor mu?</label><br>
+  <label><input type="checkbox" id="chk9"> Kayıt olma sistemi çalışıyor mu?</label><br>
+  <label><input type="checkbox" id="chk10"> Giriş ve admin girişi çalışıyor mu?</label><br>
+  <label><input type="checkbox" id="chk11"> Kayıt olmadan sipariş verilemiyor mu?</label><br>
+  <label><input type="checkbox" id="chk12"> Sipariş formu doğru çalışıyor mu?</label><br>
+  <label><input type="checkbox" id="chk13"> Stok ve fiyat admin tarafından güncellenebiliyor mu?</label><br>
+  <label><input type="checkbox" id="chk14"> Reklam / duyuru admin tarafından güncellenebiliyor mu?</label><br>
+  <label><input type="checkbox" id="chk15"> Sipariş maili admin’e geliyor mu?</label><br>
+  <button onclick="allChecked()">Tümünü Kontrol Et</button>
+</div>
+
+<p style="font-size:12px;color:#aaa">
+Siparişler mail olarak gelir.
+</p>
+</div>
+</section>
+
+<script>
+const ADMIN_USER="cinar0zer";
+const ADMIN_PASS="han11222";
+
+let stok=20;
+let fiyat=170;
+
+const loginUser=document.getElementById("loginUser");
+const loginPass=document.getElementById("loginPass");
+const regUser=document.getElementById("regUser");
+const regPass=document.getElementById("regPass");
+const orderArea=document.getElementById("orderArea");
+const adminPanel=document.getElementById("adminPanel");
+const reklamText=document.getElementById("reklamText");
+const adminReklam=document.getElementById("adminReklam");
+const orderNo=document.getElementById("orderNo");
+const adet=document.getElementById("adet");
+const fiyatInput=document.getElementById("fiyat");
+const userCount=document.getElementById("userCount");
+
+// Reklam kalıcı
+window.onload = function() {
+  if(localStorage.getItem("reklam")){
+    reklamText.innerHTML = localStorage.getItem("reklam");
+  } else {
+    localStorage.setItem("reklam", reklamText.innerHTML);
+  }
+  userCount.innerText = getUserCount();
+};
+
+function register(){
+  if(!regUser.value||!regPass.value) return alert("Boş olamaz");
+  if(localStorage.getItem(regUser.value)) return alert("Kullanıcı var");
+  localStorage.setItem(regUser.value,regPass.value);
+  alert("Kayıt başarılı");
+  userCount.innerText = getUserCount();
+}
+
+function login(){
+  let u=loginUser.value;
+  let p=loginPass.value;
+
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    adminPanel.classList.remove("hidden");
+    orderArea.classList.remove("hidden");
+    adminReklam.value = localStorage.getItem("reklam");
+    return;
+  }
+
+  if(localStorage.getItem(u)===p){
+    orderArea.classList.remove("hidden");
+  }else alert("Hatalı giriş");
+}
+
+function hesapla(){
+  fiyatInput.value=(adet.value*fiyat)+" TL";
+}
+
+function sendOrder(){
+  if(adet.value>stok){
+    alert("Yetersiz stok");
+    return false;
+  }
+  stok-=adet.value;
+  orderNo.value="TB-"+Math.floor(Math.random()*99999);
+  hesapla();
+  return true;
+}
+
+function updateReklam(){
+  let yeni = adminReklam.value;
+  reklamText.innerHTML = yeni;
+  localStorage.setItem("reklam", yeni);
+  alert("Reklam kaydedildi!");
+}
+
+function allChecked(){
+  let checklist=document.querySelectorAll("#checklist input[type=checkbox]");
+  let all=true;
+  checklist.forEach(chk => {
+    if(!chk.checked) all=false;
+  });
+  if(all) alert("🎉 Tüm maddeler işaretli, site full stabil!");
+  else alert("⚠️ Bazı maddeler işaretli değil, kontrol et!");
+}
+
+function getUserCount(){
+  let count=0;
+  for(let i=0;i<localStorage.length;i++){
+    let key=localStorage.key(i);
+    if(key!==ADMIN_USER) count++;
+  }
+  return count;
+}
+
+hesapla();
+</script>
+
+<footer style="padding:20px;color:#777">
+© 2026 TagBase – Sokaktan Doğdu
 </footer>
 
-<!-- Firebase Modül Script -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyD1AB5LzF1Z0G5LNCfSGTnin3kJbijMGuM",
-    authDomain: "tagbase-43065.firebaseapp.com",
-    projectId: "tagbase-43065",
-    storageBucket: "tagbase-43065.firebasestorage.app",
-    messagingSenderId: "1042937394410",
-    appId: "1:1042937394410:web:4f5637cb66b46ed8e61393",
-    measurementId: "G-866HDVSVF4"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Reklam çek
-  const reklamText = document.getElementById("reklamText");
-  async function loadReklam() {
-    const docRef = doc(db, "site", "reklam");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      reklamText.innerHTML = docSnap.data().metin;
-    } else {
-      await setDoc(docRef, { metin: reklamText.innerHTML });
-    }
-  }
-  loadReklam();
-
-  // Admin reklam kaydet
-  const adminReklam = document.getElementById("adminReklam");
-  async function updateReklam() {
-    const yeni = adminReklam.value;
-    reklamText.innerHTML = yeni;
-    await setDoc(doc(db, "site", "reklam"), { metin: yeni });
-    alert("Reklam kaydedildi!");
-  }
-  window.updateReklam = updateReklam;
-
-  // Sipariş gönder
-  async function sendOrder() {
-    const adet = parseInt(document.getElementById("adet").value);
-    const stokRef = doc(db, "site", "stokFiyat");
-    const stokSnap = await getDoc(stokRef);
-    let stok = stokSnap.data().stok;
-    let fiyat = stokSnap.data().fiyat;
-
-    if (adet > stok) { alert("Yetersiz stok!"); return false; }
-    stok -= adet;
-    await setDoc(stokRef, { stok: stok, fiyat: fiyat });
-
-    const orderNo = "TB-" + Math.floor(Math.random() * 99999);
-
-    await addDoc(collection(db, "siparisler"), {
-      siparis_no: orderNo,
-      isim: document.querySelector('[name="isim"]').value,
-      adres: document.querySelector('[name="adres"]').value,
-      urun: document.querySelector('[name="urun"]').value,
-      renk: document.querySelector('[name="renk"]').value,
-      adet: adet,
-      toplam: adet * fiyat,
-      tarih: new Date()
-    });
-
-    alert("Sipariş verildi! Numara: " + orderNo);
-    return true;
-  }
-  window.sendOrder = sendOrder;
-</script>
 </body>
 </html>
-
