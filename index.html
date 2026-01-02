@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>TagBase</title>
 
-<!-- GRAFFITI FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
 
 <style>
@@ -55,7 +54,6 @@ button{
 }
 
 .hidden{display:none;}
-hr{margin:30px 0;}
 </style>
 </head>
 
@@ -67,14 +65,12 @@ hr{margin:30px 0;}
   <p>ig: cinar0zer</p>
 </header>
 
-<!-- ESKİ YAZILAR GERİ -->
 <section>
 <div class="box">
 <h2>Hakkımızda</h2>
 <p>
-TaGBasE daha çok sokak stilleri için uygun olan  
-POSCA kalem ve TAG ürünleri satar.  
-Elden teslim vardır, kargo YOKTUR.  
+TaGBasE sokak stilleri için POSCA kalem ve TAG ürünleri satar.  
+Elden teslim vardır – Kargo yok.  
 📍 Bursa / Mustafakemalpaşa
 </p>
 </div>
@@ -89,25 +85,23 @@ Elden teslim vardır, kargo YOKTUR.
 </div>
 </section>
 
-<!-- GİRİŞ / KAYIT -->
 <section>
 <div class="box">
 <h2>Giriş</h2>
 <input id="loginUser" placeholder="Kullanıcı adı">
-<input id="loginPass" type="password" placeholder="Şifre">
+<input id="loginPass" type="password">
 <button onclick="login()">Giriş</button>
 </div>
 
 <div class="box">
 <h2>Kayıt Ol</h2>
 <input id="regUser" placeholder="Yeni kullanıcı adı">
-<input id="regPass" type="password" placeholder="Yeni şifre">
+<input id="regPass" type="password">
 <button onclick="register()">Kayıt</button>
-<p style="font-size:12px;color:#aaa">Kayıt olmadan sipariş veremezsin.</p>
+<p style="font-size:12px;color:#aaa">Kayıt olmadan sipariş yok.</p>
 </div>
 </section>
 
-<!-- SİPARİŞ -->
 <section id="orderArea" class="hidden">
 <div class="box">
 <h2>Sipariş Ver</h2>
@@ -123,7 +117,7 @@ Elden teslim vardır, kargo YOKTUR.
 </select>
 
 <select name="renk" required>
-<option value="">Renk Seç</option>
+<option value="">Renk</option>
 <option>Siyah</option>
 <option>Beyaz</option>
 <option>Kırmızı</option>
@@ -131,10 +125,9 @@ Elden teslim vardır, kargo YOKTUR.
 </select>
 
 <input type="number" id="adet" name="adet" value="1" min="1" oninput="hesapla()" required>
-
 <input name="toplam_fiyat" id="fiyat" readonly>
 
-<button type="submit">Siparişi Gönder</button>
+<button type="submit">Sipariş Gönder</button>
 </form>
 </div>
 </section>
@@ -144,17 +137,22 @@ Elden teslim vardır, kargo YOKTUR.
 <div class="box">
 <h2>ADMIN PANEL</h2>
 
+<p><b>Toplam Kayıtlı Kullanıcı:</b></p>
+<h1 id="userCount">0</h1>
+
+<hr>
+
 <p>Stok</p>
 <input id="stok" type="number" value="20">
 
-<p>Fiyat (TL)</p>
+<p>Birim Fiyat (TL)</p>
 <input id="birimFiyat" type="number" value="170">
 
 <button onclick="kaydet()">Kaydet</button>
 
-<hr>
-<h3>Sipariş Onay</h3>
-<p>Mail üzerinden gelen siparişleri kontrol et.</p>
+<p style="font-size:12px;color:#aaa">
+Siparişler mail olarak gelir.
+</p>
 </div>
 </section>
 
@@ -165,10 +163,20 @@ const ADMIN_PASS="han11222";
 let stok=20;
 let fiyat=170;
 
+function getUserCount(){
+  let count=0;
+  for(let i=0;i<localStorage.length;i++){
+    let key=localStorage.key(i);
+    if(key!=="ADMIN") count++;
+  }
+  return count;
+}
+
 function register(){
   if(!regUser.value||!regPass.value) return alert("Boş olmaz");
+  if(localStorage.getItem(regUser.value)) return alert("Kullanıcı var");
   localStorage.setItem(regUser.value,regPass.value);
-  alert("Kayıt tamam");
+  alert("Kayıt başarılı");
 }
 
 function login(){
@@ -178,6 +186,7 @@ function login(){
   if(u===ADMIN_USER && p===ADMIN_PASS){
     adminPanel.classList.remove("hidden");
     orderArea.classList.remove("hidden");
+    userCount.innerText=getUserCount();
     return;
   }
 
@@ -187,8 +196,7 @@ function login(){
 }
 
 function hesapla(){
-  let a=document.getElementById("adet").value;
-  fiyatInput.value=(a*fiyat)+" TL";
+  fiyatInput.value=(adet.value*fiyat)+" TL";
 }
 
 function sendOrder(){
@@ -213,10 +221,8 @@ hesapla();
 </script>
 
 <footer style="padding:20px;color:#777">
-© 2026 TagBase – cinar0zer
+© 2026 TagBase – Sokaktan Doğdu
 </footer>
 
 </body>
 </html>
-
-
