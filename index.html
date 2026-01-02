@@ -2,8 +2,9 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>TagBase</title>
+<title>TaGBasE</title>
 
+<!-- Graffiti font -->
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
 
 <style>
@@ -22,6 +23,7 @@ body{
 h1,h2,h3{
   font-family: 'Rubik Wet Paint', cursive;
   letter-spacing:2px;
+  animation: graffitiAnim 4s infinite alternate;
 }
 
 header{
@@ -29,23 +31,23 @@ header{
   background:rgba(0,0,0,0.7);
 }
 
-section{padding:30px;}
-
+section{padding:20px;}
 .box{
   background:rgba(0,0,0,0.7);
   max-width:600px;
   margin:20px auto;
   padding:20px;
   border-radius:10px;
+  transition: transform 0.3s;
 }
+.box:hover{transform: scale(1.02);}
 
-input,select,button{
+input,select,button,textarea{
   width:90%;
   max-width:300px;
   padding:8px;
   margin:5px;
 }
-
 button{
   background:#ff2e2e;
   color:#fff;
@@ -54,6 +56,23 @@ button{
 }
 
 .hidden{display:none;}
+hr{margin:30px 0;}
+
+@keyframes graffitiAnim{
+  0%{text-shadow: 0 0 2px #ff2e2e;}
+  25%{text-shadow: 0 0 4px #ff2e2e, 0 0 6px #fff;}
+  50%{text-shadow: 0 0 3px #ff2e2e, 0 0 6px #0ff;}
+  75%{text-shadow: 0 0 5px #ff2e2e, 0 0 7px #ff0;}
+  100%{text-shadow: 0 0 6px #ff2e2e, 0 0 8px #f0f;}
+}
+
+@media (max-width:600px){
+  body{font-size:14px;}
+  h1{font-size:36px;}
+  h2{font-size:28px;}
+  h3{font-size:22px;}
+  input,select,button,textarea{width:95%;}
+}
 </style>
 </head>
 
@@ -65,6 +84,7 @@ button{
   <p>ig: cinar0zer</p>
 </header>
 
+<!-- HAKKIMIZDA -->
 <section>
 <div class="box">
 <h2>Hakkımızda</h2>
@@ -83,8 +103,19 @@ Elden teslim vardır – Kargo yok.
 • Street ekipmanları
 </p>
 </div>
+
+<!-- REKLAM / DUYURU -->
+<section id="reklamSection">
+<div class="box">
+<h2>Street Wall</h2>
+<p id="reklamText" style="font-style:italic;color:#aaa">
+“Duvarlar konuşur, biz yazarız.”<br>
+🔥 Yeni POSCA renkleri yakında geliyor.
+</p>
+</div>
 </section>
 
+<!-- GİRİŞ / KAYIT -->
 <section>
 <div class="box">
 <h2>Giriş</h2>
@@ -98,10 +129,11 @@ Elden teslim vardır – Kargo yok.
 <input id="regUser" placeholder="Yeni kullanıcı adı">
 <input id="regPass" type="password">
 <button onclick="register()">Kayıt</button>
-<p style="font-size:12px;color:#aaa">Kayıt olmadan sipariş yok.</p>
+<p style="font-size:12px;color:#aaa">Kayıt olmadan sipariş veremezsin.</p>
 </div>
 </section>
 
+<!-- SİPARİŞ -->
 <section id="orderArea" class="hidden">
 <div class="box">
 <h2>Sipariş Ver</h2>
@@ -127,7 +159,7 @@ Elden teslim vardır – Kargo yok.
 <input type="number" id="adet" name="adet" value="1" min="1" oninput="hesapla()" required>
 <input name="toplam_fiyat" id="fiyat" readonly>
 
-<button type="submit">Sipariş Gönder</button>
+<button type="submit">Siparişi Gönder</button>
 </form>
 </div>
 </section>
@@ -148,7 +180,10 @@ Elden teslim vardır – Kargo yok.
 <p>Birim Fiyat (TL)</p>
 <input id="birimFiyat" type="number" value="170">
 
-<button onclick="kaydet()">Kaydet</button>
+<hr>
+<h3>Reklam / Duyuru Düzenle</h3>
+<textarea id="adminReklam" rows="4"></textarea><br>
+<button onclick="updateReklam()">Güncelle</button>
 
 <p style="font-size:12px;color:#aaa">
 Siparişler mail olarak gelir.
@@ -167,7 +202,7 @@ function getUserCount(){
   let count=0;
   for(let i=0;i<localStorage.length;i++){
     let key=localStorage.key(i);
-    if(key!=="ADMIN") count++;
+    if(key!==ADMIN_USER) count++;
   }
   return count;
 }
@@ -187,6 +222,8 @@ function login(){
     adminPanel.classList.remove("hidden");
     orderArea.classList.remove("hidden");
     userCount.innerText=getUserCount();
+    // adminReklam textarea'sına mevcut reklamı yükle
+    adminReklam.value = reklamText.innerHTML;
     return;
   }
 
@@ -214,6 +251,12 @@ function kaydet(){
   fiyat=document.getElementById("birimFiyat").value;
   hesapla();
   alert("Güncellendi");
+}
+
+// REKLAM GÜNCELLEME
+function updateReklam(){
+  reklamText.innerHTML = adminReklam.value;
+  alert("Reklam güncellendi!");
 }
 
 let fiyatInput=document.getElementById("fiyat");
