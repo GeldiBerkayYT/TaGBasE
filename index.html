@@ -28,11 +28,11 @@ body, h1, h2, h3, p, span, label, input, select, textarea, button {
 }
 
 @keyframes rgbGlow{
-  0%   { text-shadow:0 0 4px red; }
-  25%  { text-shadow:0 0 6px cyan; }
-  50%  { text-shadow:0 0 6px yellow; }
-  75%  { text-shadow:0 0 6px magenta; }
-  100% { text-shadow:0 0 8px red; }
+  0%{text-shadow:0 0 4px red}
+  25%{text-shadow:0 0 6px cyan}
+  50%{text-shadow:0 0 6px yellow}
+  75%{text-shadow:0 0 6px magenta}
+  100%{text-shadow:0 0 8px red}
 }
 
 h1,h2,h3{
@@ -71,7 +71,7 @@ button{
 
 .hidden{display:none}
 
-/* spray click */
+/* spray */
 .spray{
   position:fixed;
   width:20px;
@@ -158,11 +158,10 @@ REKLAM ALANI<br>
 </select>
 
 <input type="number" id="adet" value="1" min="1" oninput="hesapla()">
-<input id="fiyat" name="toplam_fiyat" readonly>
+<input id="fiyat" name="toplam_fiyat" placeholder="Toplam Fiyat" readonly>
 
 <label style="font-size:12px">
-<input type="checkbox" id="onay" required>
-Elden teslimi kabul ediyorum
+<input type="checkbox" id="onay" required> Elden teslimi kabul ediyorum
 </label><br>
 
 <button type="submit">Siparişi Gönder</button>
@@ -174,14 +173,14 @@ Elden teslimi kabul ediyorum
 <div class="box">
 <h2>ADMIN PANEL</h2>
 
-<p>Kayıtlı kullanıcı sayısı</p>
+<p>Kayıtlı kullanıcı</p>
 <h1 id="userCount">0</h1>
 
 <p>Stok</p>
-<input id="stokInput" type="number" value="20">
+<input id="stokInput" type="number">
 
 <p>Birim Fiyat</p>
-<input id="fiyatInput" type="number" value="170">
+<input id="fiyatAdmin" type="number">
 
 <h3>Reklam / Duyuru</h3>
 <textarea id="adminReklam"></textarea><br>
@@ -192,17 +191,9 @@ Elden teslimi kabul ediyorum
 <section>
 <div class="box">
 <h2>Bize Ulaş</h2>
-<p>Reklam • İş Birliği • Ürün Soruları</p>
-
 <iframe
 src="https://docs.google.com/forms/d/e/1FAIpQLSeJBvOIwuRGaNlcjtbc2cwAQiIIEIyAgPkHxGZKGWFhmoWEog/viewform?embedded=true"
-width="100%"
-height="700"
-frameborder="0"
-marginheight="0"
-marginwidth="0">
-Yükleniyor…
-</iframe>
+width="100%" height="700" frameborder="0">Yükleniyor…</iframe>
 </div>
 </section>
 
@@ -217,20 +208,20 @@ Yükleniyor…
 const ADMIN_USER="cinar0zer";
 const ADMIN_PASS="han11222";
 
-let stok=20;
-let fiyat=170;
+let stok = Number(localStorage.stok || 20);
+let fiyat = Number(localStorage.fiyat || 170);
 
 window.onload=()=>{
- if(localStorage.reklam){
-  reklamText.innerHTML=localStorage.reklam;
- }
+ if(localStorage.reklam) reklamText.innerHTML=localStorage.reklam;
+ stokInput.value = stok;
+ fiyatAdmin.value = fiyat;
  updateUserCount();
  hesapla();
-}
+};
 
 function register(){
- if(!regUser.value||!regPass.value)return alert("Boş olmaz");
- if(localStorage[regUser.value])return alert("Kullanıcı var");
+ if(!regUser.value||!regPass.value) return alert("Boş olmaz");
+ if(localStorage[regUser.value]) return alert("Kullanıcı var");
  localStorage[regUser.value]=regPass.value;
  updateUserCount();
  alert("Kayıt tamam");
@@ -245,17 +236,19 @@ function login(){
  }
  if(localStorage[loginUser.value]===loginPass.value){
   orderArea.classList.remove("hidden");
- }else alert("Hatalı giriş");
+ } else alert("Hatalı giriş");
 }
 
 function hesapla(){
- fiyatInput.value=(adet.value*fiyat)+" TL";
+ fiyat = Number(fiyatAdmin?.value || fiyat);
+ document.getElementById("fiyat").value = (adet.value * fiyat) + " TL";
 }
 
 function sendOrder(){
- if(!onay.checked){alert("Onay ver");return false;}
- if(adet.value>stok){alert("Stok yok");return false;}
- stok-=adet.value;
+ if(!onay.checked) return alert("Onay ver"),false;
+ if(adet.value>stok) return alert("Stok yok"),false;
+ stok -= adet.value;
+ localStorage.stok = stok;
  orderNo.value="TB-"+Math.floor(Math.random()*99999);
  hesapla();
  return true;
@@ -264,13 +257,18 @@ function sendOrder(){
 function saveReklam(){
  localStorage.reklam=adminReklam.value;
  reklamText.innerHTML=adminReklam.value;
+ localStorage.fiyat = fiyatAdmin.value;
+ localStorage.stok = stokInput.value;
+ fiyat = Number(fiyatAdmin.value);
+ stok = Number(stokInput.value);
+ hesapla();
  alert("Kaydedildi");
 }
 
 function updateUserCount(){
  let c=0;
  for(let i=0;i<localStorage.length;i++){
-  if(localStorage.key(i)!==ADMIN_USER)c++;
+  if(localStorage.key(i)!==ADMIN_USER) c++;
  }
  userCount.innerText=c;
 }
